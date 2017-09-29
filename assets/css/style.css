@@ -1,0 +1,9 @@
+body{
+	background-image: url("../images/colorfulbackdrop.jpg"); 
+}
+#correctIncorrect, .timeDiv, #questionContent{
+	color: yellow;
+}
+.choices: hover{
+	background-color: green;
+}
