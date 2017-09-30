@@ -4,6 +4,8 @@ body{
 #correctIncorrect, .timeDiv, #questionContent{
 	color: yellow;
 }
-.choices: hover{
-	background-color: green;
+.choices{
+	visibility: hidden;
+	width: 340px;
+	margin-bottom: 10px;
 }

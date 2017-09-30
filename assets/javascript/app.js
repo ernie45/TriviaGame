@@ -1,23 +1,25 @@
 //VARIABLE DECLARATION/////////////////////////////////////////////////////////////////////////////////////////////
-var questions =  [new Question("What is the name of the town in 'IT', the movie?", "Loogieville", "Denney", "Townsville", "Clownville", "Denney", "assets/images/happyit.jpg", "assets/images/angryit.png"),
-				new Question("Who is the voice of Meg Griffin from Family Guy?", "Gal Gadot", "Reese Witherspoon", "Mila Kunis", "Angelina Jolie", "Mila Kunis", "assets/images/correctMeg.jpg", "assets/images/incorrectMeg.jpg"),
-				new Question("How many Fast & Furious Movies have come out as of 2017?", "9", "8", "7", "None of the Above", "None of the Above", "assets/images/correctFast.jpg", "assets/images/incorrectFast.jpg"),
-				new Question("What year did the first ever anything air on TV", "1999", "1928", "1945", "1776", "1928", "assets/images/correctTV.jpg", "assets/images/incorrectTV.jpg"),
-				new Question("fix", "fix", "fix", "fix", "fix", "fix", "fix", "fix", "fix"),
-				new Question("fix", "fix", "fix", "fix", "fix", "fix", "fix", "fix"),
-				new Question("fix", "fix", "fix", "fix", "fix", "fix", "fix", "fix,"),
-				new Question("fix", "fix", "fix", "fix", "fix", "fix", "fix", "fix")];
+var questions =  [new Question("What company bought Whole Foods and lowered prices?", "Alphabet", "Amazon", "Disney", "Sony", "Amazon", "assets/images/happyit.jpg", "assets/images/angryit.png"),
+				new Question("Which application was banned from being used in the Amazon Echo?", "Facebook", "PokemonGo", "Snapchat", "Youtube", "Youtube", "assets/images/correctMeg.jpg", "assets/images/incorrectMeg.jpg"),
+				new Question("This city has tested a flying taxi as of september 2017", "Dubai", "Detroit", "New York", "Palo Alto", "Dubai", "assets/images/correctFast.jpg", "assets/images/incorrectFast.jpg"),
+				new Question("What famous person aided in the creation of the first JPEG?", "Hugh Hefner", "Bill Murray", "Snoop Dogg", "Beyonce", "Hugh Hefner", "assets/images/correctTV.jpg", "assets/images/incorrectTV.jpg"),
+				new Question("2017 brought a newfound, lost, submerged continent by the name of", "Atlantis", "Zoolandia", "Zealandia", "Africania", "Zealandia", "assets/images/geography.jpg", "assets/images/geography.jpg"),
+				new Question("Who founded Neuralink?", "Warren Buffet", "Elon Musk", "Donald Trump", "Marshall Mathers", "Elon Musk", "assets/images/brain.jpg", "assets/images/brain.jpg"),
+				new Question("Microsoft 365 finally added this", "Slack", "LinkedIn", "GitHub", "StackOverflow", "LinkedIn", "assets/images/microsoft.jpg", "assets/images/microsoft.jpg"),
+				new Question("On a serious Note: A newfound symptom of early Alzheimers detection is", "Loss of eyesight", "Loss of nailbeds", "Loss of olfaction", "Loss of hair", "Loss of olfaction", "assets/images/alzheimers.jpg", "assets/images/alzheimers.jpg")];
 var index = 0;
 var correctAnswers = 0;
 var wrongAnswers = 0;
 var currentQuestion;
 var intervalId;
+var cont = true;
 //MAIN FUNCTION////////////////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function(){
 	$("#begin").on("click", function(){
 		currentQuestion = questions[index];
 		displayQuestion();
 		countDown($("#timeRemaining"), 30);
+		$(".choices").css("visibility", "visible");
 	});
 	//DISPLAY THE QUESTION AT HAND
 	//UPON CLICKING ON THE MULTIPLE CHOICES
@@ -27,32 +29,40 @@ $(document).ready(function(){
 		clearInterval(intervalId);
 		$("#timeRemaining").empty();
 		//GET THE INPUT ANSWER
-		var chosenAnswer = $(this).text();
+		chosenAnswer = $(this).text();
 		$("#questionContent").css("visibility", "hidden");
 		//IF CORRECT, CORRECTANSWERS INCREMENTS
 		if (index <= questions.length){
+			if (index === questions.length){
+				cont = false;
+			}
 			if (currentQuestion.correctAnswer(chosenAnswer)){
 				$("#timeRemaining").html("<h1>NICE JOB!!!!!!</h1><br><img src='" + currentQuestion.getImage() + "' style='height: 200px; width: 300px;'>");
 				correctAnswers++;
+				$(".choices").css("visibility", "hidden");
 			}
 			//IF WRONG ANSWER, WRONG ANSWER INCREMENTS
 			else{
 				$("#timeRemaining").html("<h1>SORRY, WRONG ANSWER!!!!!!</h1><br><h1>CORRECT ANSWER: " + currentQuestion.correct + "</h1><br><img src='" + currentQuestion.getImage() + "' style='height: 200px; width: 300px;'>");
 				wrongAnswers++;
+				$(".choices").css("visibility", "hidden");
 			}
-			setTimeout(function(){
-				$("#questionContent").css("visibility", "visible");
-				$("#timeRemaining").empty();
-				$("#timeRemaining").html("<h3 id='timeRemaining'></h3>");
-				index++;
-				currentQuestion = questions[index];
-				displayQuestion();
-				countDown($("#timeRemaining"), 30);
-			}, 4000);
-		}
-		else{
-			displayResults();
-		}		
+			if (cont){
+				setTimeout(function(){
+					$("#questionContent").css("visibility", "visible");
+					$("#timeRemaining").empty();
+					$("#timeRemaining").html("<h3 id='timeRemaining'></h3>");
+					index++;
+					currentQuestion = questions[index];
+					displayQuestion();
+					countDown($("#timeRemaining"), 30);
+					$(".choices").css("visibility", "visible");
+				}, 1000);
+			}
+			else{
+				console.log("were done");
+			}	
+		}	
 	});
 });
 //FUNCTIONS TO CALL////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,10 +97,10 @@ function Question(question, option1, option2, option3, option4, correct, correct
 //SHOW THE CURRENTQUESTION AND OPTIONS
 function displayQuestion(){
 		$("#actualQuestion").html("<h3>" + currentQuestion.question + "</h3>");
-		$("#choice1").html("<h3>" + currentQuestion.option1 + "</h3>");
-		$("#choice2").html("<h3>" + currentQuestion.option2 + "</h3>");
-		$("#choice3").html("<h3>" + currentQuestion.option3 + "</h3>");
-		$("#choice4").html("<h3>" + currentQuestion.option4 + "</h3>");
+		$("#choice1").text(currentQuestion.option1);
+		$("#choice2").text(currentQuestion.option2);
+		$("#choice3").text(currentQuestion.option3);
+		$("#choice4").text(currentQuestion.option4);
 	};
 //SET THE CLOCK TICKING 
 function countDown(target, seconds){
@@ -112,7 +122,6 @@ function countDown(target, seconds){
 	}, 1000);
 };
 function displayResults(){
-	console.log(wrongAnswers);
-	console.log(correctAnswers);
+	$("#actualQuestion").html("<h1>THE GAME IS NOW OVER</h1><br><button class='btn btn-warning>Replay</button>");
 
 };
