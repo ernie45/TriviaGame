@@ -32,10 +32,7 @@ $(document).ready(function(){
 		chosenAnswer = $(this).text();
 		$("#questionContent").css("visibility", "hidden");
 		//IF CORRECT, CORRECTANSWERS INCREMENTS
-		if (index <= questions.length){
-			if (index === questions.length){
-				cont = false;
-			}
+		if (index < questions.length){
 			if (currentQuestion.correctAnswer(chosenAnswer)){
 				$("#timeRemaining").html("<h1>NICE JOB!!!!!!</h1><br><img src='" + currentQuestion.getImage() + "' style='height: 200px; width: 300px;'>");
 				correctAnswers++;
@@ -47,7 +44,13 @@ $(document).ready(function(){
 				wrongAnswers++;
 				$(".choices").css("visibility", "hidden");
 			}
-			if (cont){
+			if (index === questions.length - 1){
+				cont = false;
+				setTimeout(function(){
+					displayResults();
+				}, 1000);
+			}
+			else{
 				setTimeout(function(){
 					$("#questionContent").css("visibility", "visible");
 					$("#timeRemaining").empty();
@@ -59,9 +62,6 @@ $(document).ready(function(){
 					$(".choices").css("visibility", "visible");
 				}, 1000);
 			}
-			else{
-				console.log("were done");
-			}	
 		}	
 	});
 });
@@ -114,7 +114,6 @@ function countDown(target, seconds){
 			clearInterval(intervalId);
 			console.log("Out Of Time");
 			index++;
-			console.log(index);
 			currentQuestion = questions[index];
 			displayQuestion(currentQuestion);
 			countDown(target, set);
@@ -122,6 +121,6 @@ function countDown(target, seconds){
 	}, 1000);
 };
 function displayResults(){
-	$("#actualQuestion").html("<h1>THE GAME IS NOW OVER</h1><br><button class='btn btn-warning>Replay</button>");
+	$("#actualQuestion").html("<h1>THE GAME IS NOW OVER</h1>");
 
 };
