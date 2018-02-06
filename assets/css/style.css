@@ -9,3 +9,6 @@ body{
 	width: 340px;
 	margin-bottom: 10px;
 }
+#titleDiv{
+	font-weight: bold;
+}
